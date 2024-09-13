@@ -1,5 +1,6 @@
 name: Install nix and resolve packages using nix-shell
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
