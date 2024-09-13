@@ -1,4 +1,4 @@
-name: Install nix and resolve dependencies using nix-shell
+name: Install nix and resolve packages using nix-shell
 on:
   push:
     branches:
@@ -19,3 +19,22 @@ jobs:
 
           # Testing whether Nix is available in subsequent commands
           nix --version
+
+  install-linuxbrew-and-resolve-packages:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Install linuxbrew
+        run: |
+          sudo apt update -y && sudo apt install -y sshpass sudo curl git openssl build-essential procps file gettext
+
+          sudo useradd linuxbrew
+          sudo usermod -aG sudo linuxbrew
+          export LINUXBREW_PASSWORD=$(openssl rand -hex 32)
+          echo -e "$LINUXBREW_PASSWORD\n$LINUXBREW_PASSWORD\n" | sudo -E passwd linuxbrew
+          sudo -E -u linuxbrew sudo -S -v <<< "$LINUXBREW_PASSWORD" && sudo mkdir -p /home/linuxbrew && sudo chown linuxbrew -R /home/linuxbrew && cd && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> ~/.bashrc
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+          curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
