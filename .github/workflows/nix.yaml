@@ -33,10 +33,19 @@ jobs:
           sudo apt update -y && sudo apt install -y sshpass sudo curl git openssl build-essential procps file gettext
 
           sudo useradd linuxbrew
+
           sudo usermod -aG sudo linuxbrew
+          sudo usermod -aG linuxbrew linuxbrew
+
+          sudo usermod -aG linuxbrew $USER
+
           export LINUXBREW_PASSWORD=$(openssl rand -hex 32)
           echo -e "$LINUXBREW_PASSWORD\n$LINUXBREW_PASSWORD\n" | sudo -E passwd linuxbrew
-          sudo -E -u linuxbrew sudo -S -v <<< "$LINUXBREW_PASSWORD" && sudo mkdir -p /home/linuxbrew && sudo chown linuxbrew -R /home/linuxbrew && cd && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          sudo mkdir -p /home/linuxbrew
+          sudo chown linuxbrew:linuxbrew -R /home/linuxbrew
+          sudo -u linuxbrew /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> ~/.bashrc
 
-          sudo bash -c 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install kubectl helm helmfile k9s'
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+          brew install kubectl helm helmfile k9s
