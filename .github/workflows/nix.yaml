@@ -38,8 +38,5 @@ jobs:
           echo -e "$LINUXBREW_PASSWORD\n$LINUXBREW_PASSWORD\n" | sudo -E passwd linuxbrew
           sudo -E -u linuxbrew sudo -S -v <<< "$LINUXBREW_PASSWORD" && sudo mkdir -p /home/linuxbrew && sudo chown linuxbrew -R /home/linuxbrew && cd && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
           (echo; echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"') >> ~/.bashrc
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-          curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
-
-          brew install kubectl helm helmfile k9s
+          sudo bash -c 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" && brew install kubectl helm helmfile k9s'
