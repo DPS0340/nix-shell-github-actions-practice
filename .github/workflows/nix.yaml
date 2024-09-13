@@ -48,4 +48,7 @@ jobs:
 
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+          sudo chown -R runner /home/linuxbrew/.linuxbrew
+          sudo chmod -R u+w /home/linuxbrew/.linuxbrew
+
           brew install kubectl helm helmfile k9s
