@@ -21,6 +21,9 @@ jobs:
           nix --version
 
           nix-shell -p bash kubectl helm helmfile k9s
+
+          kubectl version || true
+
           exit 0
 
   install-linuxbrew-and-resolve-packages:
@@ -52,3 +55,5 @@ jobs:
           sudo chmod -R u+w /home/linuxbrew/.linuxbrew
 
           brew install kubectl helm helmfile k9s
+
+          kubectl version || true
