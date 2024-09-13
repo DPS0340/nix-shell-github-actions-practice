@@ -1,0 +1,21 @@
+name: Install nix and resolve dependencies using nix-shell
+on:
+  push:
+    branches:
+      - main
+jobs:
+  install-nix-and-use-nix-shell:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: Install nix
+        run: |
+          curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
+
+          if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+            . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+          fi
+
+          # Testing whether Nix is available in subsequent commands
+          nix --version
