@@ -26,6 +26,24 @@ jobs:
           kubectl version || true
 
           exit 0
+ 
+  install-cached-nix-and-use-nix-shell:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - name: use nix shell
+        run: |
+          # Testing whether Nix is available in subsequent commands
+          nix --version
+
+          nix-shell -p bash kubectl helm helmfile k9s
+
+          kubectl version || true
+
+          exit 0
 
   install-linuxbrew-and-resolve-packages:
     runs-on: ubuntu-24.04
